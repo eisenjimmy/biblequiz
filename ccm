@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <title>Bible Quiz (Mobile) — Samuel / Ephesians / Philippians / Colossians / Philemon</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html,body{height:100%}
+    body{background:linear-gradient(180deg,#f8fafc,#eef2ff);-webkit-font-smoothing:antialiased}
+    .app{max-width:720px;margin:0 auto;padding:18px;min-height:100vh;display:flex;flex-direction:column}
+    .card{box-shadow:0 8px 28px rgba(8,30,78,.07)}
+    .opt-btn{padding-top:14px;padding-bottom:14px}
+    .explain{background:#fff;border-left:4px solid #0ea5e9;padding:12px;border-radius:8px}
+    .chip{border-radius:9999px;padding:.25rem .6rem;border:1px solid #e5e7eb;font-size:.75rem}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header class="mb-4">
+    <div class="card bg-white rounded-2xl p-4">
+      <h1 class="text-2xl font-semibold text-center">Bible Quiz — Mobile</h1>
+      <p class="text-sm text-center text-gray-600 mt-1">1 Samuel · 2 Samuel · Ephesians · Philippians · Colossians · Philemon</p>
+      <p class="text-xs text-center text-gray-500">Features: wrong-answer notebook, cookie save-state, difficulty filter, chapter intros.</p>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <!-- Book & Mode selector -->
+    <section class="card bg-white rounded-2xl p-4 mb-4" id="selector">
+      <div class="grid grid-cols-1 gap-3">
+        <label class="block text-sm font-medium text-gray-700">Choose a Book</label>
+        <select id="bookSelect" class="w-full rounded-lg border-gray-200 shadow-sm p-3">
+          <option value="">— Select —</option>
+          <option value="1sam">1 Samuel</option>
+          <option value="2sam">2 Samuel</option>
+          <option value="eph">Ephesians</option>
+          <option value="phil">Philippians</option>
+          <option value="col">Colossians</option>
+          <option value="phm">Philemon</option>
+        </select>
+
+        <div class="grid grid-cols-2 gap-2 mt-2">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Difficulty</label>
+            <select id="diffSelect" class="w-full rounded-lg border-gray-200 shadow-sm p-3">
+              <option value="all">All</option>
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Question Mode</label>
+            <select id="modeSelect" class="w-full rounded-lg border-gray-200 shadow-sm p-3">
+              <option value="normal">All Questions</option>
+              <option value="wrongonly">Wrong-Answer Review</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="flex gap-2 mt-3">
+          <button id="startBtn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-semibold">Start Quiz</button>
+          <button id="resumeBtn" class="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-3">Resume (from cookies)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chapter Intro -->
+    <section class="card bg-white rounded-2xl p-4 mb-4 hidden" id="intro">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="font-semibold" id="introTitle">Book Intro</h2>
+        <span id="introMeta" class="chip text-gray-600"></span>
+      </div>
+      <div class="text-sm text-gray-800" id="introBody"></div>
+    </section>
+
+    <!-- Quiz Area -->
+    <section id="quizArea" class="hidden card bg-white rounded-2xl p-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-sm text-gray-600" id="bookTitle"></div>
+        <div class="text-sm text-gray-600 flex items-center gap-2">
+          <span id="progress">0 / 0</span>
+          <span id="diffPill" class="chip text-blue-700 bg-blue-50 border-blue-200">All</span>
+        </div>
+      </div>
+
+      <div id="qCard" class="mb-3"></div>
+      <div id="explainBox" class="hidden mb-4 explain text-sm text-gray-700"></div>
+
+      <div class="flex gap-2">
+        <button id="nextBtn" class="flex-1 bg-green-600 text-white rounded-lg py-3 font-semibold" disabled>Next</button>
+        <button id="quitBtn" class="flex-1 bg-red-50 text-red-600 rounded-lg py-3 border border-red-100">Quit</button>
+      </div>
+    </section>
+
+    <!-- Results -->
+    <section id="resultArea" class="hidden card bg-white rounded-2xl p-4 mt-4">
+      <div class="text-center mb-3">
+        <div class="text-lg font-bold" id="finalScore"></div>
+        <div class="text-sm text-gray-600" id="finalMsg"></div>
+      </div>
+      <div class="grid grid-cols-1 gap-2">
+        <button id="reviewBtn" class="w-full bg-blue-600 text-white rounded-lg py-3">See Answers & Explanations</button>
+        <button id="restartBtn" class="w-full bg-white border border-gray-200 rounded-lg py-3">Restart</button>
+      </div>
+    </section>
+
+    <!-- Review list -->
+    <section id="reviewArea" class="hidden card bg-white rounded-2xl p-4 mt-4">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="font-semibold">Answer Review</h3>
+        <button id="exportWrongBtn" class="chip bg-yellow-50 border-yellow-200 text-yellow-700">Export Wrong Notebook</button>
+      </div>
+      <div id="reviewList" class="space-y-3 max-h-[52vh] overflow-auto pr-2"></div>
+      <div class="mt-3 grid grid-cols-1 gap-2">
+        <button id="closeReviewBtn" class="w-full bg-gray-100 rounded-lg py-3">Close</button>
+        <button id="retryWrongBtn" class="w-full bg-orange-600 text-white rounded-lg py-3">Retry Wrong Answers</button>
+        <button id="clearWrongBtn" class="w-full bg-white border border-gray-200 rounded-lg py-3">Clear Wrong Notebook</button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mt-4 text-center text-xs text-gray-500">
+    Works offline once opened. State saved in cookies/localStorage.
+  </footer>
+</div>
+
+<script>
+/********************
+ * Data: Book intros
+ ********************/
+const bookIntros = {
+  '1sam': {
+    title: '1 Samuel',
+    meta: 'Author(s): Samuel (parts), Nathan, Gad · Period: late 11th c. BC',
+    background: 'Israel transitions from judges to monarchy. Samuel rises as a prophet; Saul becomes the first king; David emerges.',
+    summary: 'Covers Hannah and Samuel, Israel\'s demand for a king, Saul\'s rise and fall, and David\'s early victories (Goliath) and trials under Saul.',
+    characters: [
+      {name:'Samuel', note:'Prophet/priest who anoints Saul and later David.'},
+      {name:'Saul', note:'Israel\'s first king; disobeys and is rejected.'},
+      {name:'David', note:'Shepherd anointed as future king; slays Goliath.'},
+      {name:'Hannah', note:'Mother of Samuel; model of prayer.'},
+      {name:'Jonathan', note:'Saul\'s son; loyal friend to David.'},
+    ]
+  },
+  '2sam': {
+    title: '2 Samuel',
+    meta: 'Author(s): Nathan, Gad (trad.) · Period: early 10th c. BC',
+    background: 'David\'s reign over a united Israel from Jerusalem; great victories as well as moral failure and family turmoil.',
+    summary: 'David becomes king, captures Jerusalem, brings the Ark; sins with Bathsheba; faces Absalom\'s revolt; ends with judgments and psalms.',
+    characters: [
+      {name:'David', note:'King of Israel; poet, warrior, penitent.'},
+      {name:'Nathan', note:'Prophet who confronts David.'},
+      {name:'Joab', note:'David\'s general; capable yet ruthless.'},
+      {name:'Absalom', note:'David\'s son who rebels against him.'},
+      {name:'Bathsheba', note:'Wife of Uriah; later wife of David.'},
+    ]
+  },
+  'eph': {
+    title: 'Ephesians',
+    meta: 'Author: Paul · Date: c. AD 60–62 (Roman custody)',
+    background: 'Circular epistle emphasizing the church’s identity in Christ and unity of Jews and Gentiles.',
+    summary: 'The believer\'s riches in Christ (chs. 1–3) and the believer\'s walk (chs. 4–6): unity, maturity, household codes, and the armor of God.',
+    characters: [
+      {name:'Paul', note:'Apostle; the letter\'s author.'},
+      {name:'Ephesians', note:'Gentile-majority believers called to unity and maturity.'}
+    ]
+  },
+  'phil': {
+    title: 'Philippians',
+    meta: 'Author: Paul · Date: c. AD 60–62 (Roman custody)',
+    background: 'A warm, joyful letter to the church at Philippi, partners in the gospel.',
+    summary: 'Themes of joy, partnership, humility (Christ hymn), perseverance, and contentment in all circumstances.',
+    characters: [
+      {name:'Paul', note:'Author; rejoices despite imprisonment.'},
+      {name:'Timothy', note:'Trusted coworker sent to Philippi.'},
+      {name:'Epaphroditus', note:'Messenger who risked his life to serve Paul.'}
+    ]
+  },
+  'col': {
+    title: 'Colossians',
+    meta: 'Author: Paul · Date: c. AD 60–62 (Roman custody)',
+    background: 'Addresses false teaching by exalting Christ\'s supremacy and sufficiency.',
+    summary: 'Christ is the image of God and head of the church; believers are to put off the old self, put on the new, and live prayerfully and wisely.',
+    characters: [
+      {name:'Paul', note:'Author; defends Christ\'s supremacy.'},
+      {name:'Epaphras', note:'Founder/servant to the Colossians.'},
+      {name:'Colossian believers', note:'Warned against hollow philosophy and legalism.'}
+    ]
+  },
+  'phm': {
+    title: 'Philemon',
+    meta: 'Author: Paul · Date: c. AD 60–62 (Roman custody)',
+    background: 'A personal letter about reconciliation regarding Onesimus, a runaway slave.',
+    summary: 'Paul appeals to Philemon to receive Onesimus as a beloved brother, modeling gospel-shaped forgiveness and partnership.',
+    characters: [
+      {name:'Philemon', note:'Recipient; respected Christian host.'},
+      {name:'Onesimus', note:'Former slave; converted helper to Paul.'},
+      {name:'Paul', note:'Author; intercedes for Onesimus.'}
+    ]
+  }
+};
+
+/*************************
+ * Data: Question banks  *
+ * Each: {question, options[4], answer (index), explain, difficulty}
+ *************************/
+// NOTE: For brevity, each book below includes a compact sample. Replace with your full 20 per book.
+const booksData = {
+  '1sam': {
+    title: '1 Samuel',
+    questions: [
+      {question:'Who was Samuel\'s mother?', options:['Miriam','Hannah','Naomi','Mary'], answer:1, explain:'Hannah prayed earnestly and the Lord gave Samuel.', difficulty:'easy'},
+      {question:'Israel\'s first anointed king was…', options:['David','Saul','Solomon','Ahab'], answer:1, explain:'Saul was anointed after Israel demanded a king.', difficulty:'easy'},
+      {question:'David defeated Goliath with a…', options:['Sword','Spear','Sling and stone','Bow'], answer:2, explain:'David used a sling and a stone (1 Sam 17).', difficulty:'easy'},
+      {question:'Why was Saul rejected by the Lord in 1 Samuel?', options:['Did not pray','False prophecy','Failed to fully destroy Amalek','Cowardice'], answer:2, explain:'He disobeyed God\'s command concerning Amalek.', difficulty:'medium'},
+      {question:'Jonathan was…', options:['Saul\'s general','Saul\'s son and David\'s friend','A Philistine prince','A priest'], answer:1, explain:'Jonathan, Saul\'s son, loved David as a friend.', difficulty:'easy'}
+    ]
+  },
+  '2sam': {
+    title: '2 Samuel',
+    questions: [
+      {question:'Central figure of 2 Samuel?', options:['Saul','David','Solomon','Samuel'], answer:1, explain:'2 Samuel focuses on David\'s reign.', difficulty:'easy'},
+      {question:'Prophet who confronted David over Bathsheba:', options:['Samuel','Nathan','Elijah','Jeremiah'], answer:1, explain:'Nathan confronted David, leading to repentance.', difficulty:'medium'},
+      {question:'Absalom was…', options:['David\'s brother','David\'s son who rebelled','A priest','A general'], answer:1, explain:'Absalom led a revolt against David.', difficulty:'easy'},
+      {question:'Consequence of David\'s census:', options:['Famine','Plague','Earthquake','Exile'], answer:1, explain:'A plague struck as judgment.', difficulty:'medium'},
+      {question:'Joab was…', options:['A prophet','David\'s general','A Philistine king','A priest'], answer:1, explain:'Joab served as David\'s commander.', difficulty:'easy'}
+    ]
+  },
+  'eph': {
+    title: 'Ephesians',
+    questions: [
+      {question:'Author of Ephesians?', options:['Peter','John','Paul','James'], answer:2, explain:'Paul wrote Ephesians during custody (AD 60–62).', difficulty:'easy'},
+      {question:'The church is described as Christ\'s…', options:['Army','Body','Palace','Chariot'], answer:1, explain:'Ephesians emphasizes the body metaphor.', difficulty:'easy'},
+      {question:'The “armor of God” appears in chapter…', options:['3','4','5','6'], answer:3, explain:'Spiritual warfare and God\'s armor are in Eph 6.', difficulty:'easy'},
+      {question:'Salvation is by…', options:['Works','Law','Grace through faith','Birthright'], answer:2, explain:'By grace through faith (Eph 2:8–9).', difficulty:'easy'},
+      {question:'“One Lord, one faith, one baptism” is in Eph…', options:['2','3','4','5'], answer:2, explain:'Unity theme in chapter 4.', difficulty:'easy'}
+    ]
+  },
+  'phil': {
+    title: 'Philippians',
+    questions: [
+      {question:'Main theme of Philippians?', options:['Sorrow','Joy','Law','Judgment'], answer:1, explain:'Joy and partnership in the gospel permeate the letter.', difficulty:'easy'},
+      {question:'Paul wrote Philippians from…', options:['Ephesus','Rome (custody)','Jerusalem','Antioch'], answer:1, explain:'Likely from Roman imprisonment (AD 60–62).', difficulty:'easy'},
+      {question:'The Christ-hymn (humility) is in chapter…', options:['1','2','3','4'], answer:1, explain:'Christ\'s humility and exaltation, Phil 2.', difficulty:'medium'},
+      {question:'“I can do all things…” is Phil…', options:['1:6','2:10','4:13','3:8'], answer:2, explain:'Philippians 4:13.', difficulty:'easy'},
+      {question:'Epaphroditus was…', options:['A prophet','A messenger who served Paul','A soldier','A judge'], answer:1, explain:'He risked his life to help Paul.', difficulty:'easy'}
+    ]
+  },
+  'col': {
+    title: 'Colossians',
+    questions: [
+      {question:'Central emphasis of Colossians?', options:['Wealth','Christ\'s supremacy and fullness','Food laws','Angels'], answer:1, explain:'Christ is preeminent; beware hollow philosophy.', difficulty:'medium'},
+      {question:'Founder/minister to the Colossians:', options:['Barnabas','Epaphras','Silas','Luke'], answer:1, explain:'Epaphras labored for the church at Colossae.', difficulty:'easy'},
+      {question:'“Set your minds on things above” is in chapter…', options:['1','2','3','4'], answer:2, explain:'Colossians 3 — put on the new self.', difficulty:'easy'},
+      {question:'Paul warns against…', options:['Prayer','Thanksgiving','Empty philosophy & legalism','Unity'], answer:2, explain:'Human traditions and legalism distort the gospel.', difficulty:'medium'},
+      {question:'Result of Christ\'s fullness in believers:', options:['Pride','Humility, forbearance, love','Isolation','Greed'], answer:1, explain:'Gospel ethics flow from union with Christ.', difficulty:'easy'}
+    ]
+  },
+  'phm': {
+    title: 'Philemon',
+    questions: [
+      {question:'Recipient of the letter?', options:['Onesimus','Philemon','Demas','Luke'], answer:1, explain:'Philemon is the addressee; a respected believer.', difficulty:'easy'},
+      {question:'Onesimus was originally…', options:['A priest','A runaway slave','A prophet','A soldier'], answer:1, explain:'Onesimus fled but came to faith and service.', difficulty:'easy'},
+      {question:'Paul asks Philemon to receive Onesimus as…', options:['A servant again','A debtor','A beloved brother','A guest'], answer:2, explain:'Gospel reconciliation reshapes relationships.', difficulty:'medium'},
+      {question:'Paul offers to…', options:['Ignore the debt','Pay what Onesimus owes','Punish Onesimus','Appeal to Caesar'], answer:1, explain:'He volunteers to cover the wrong, modeling grace.', difficulty:'medium'},
+      {question:'Tone of the letter is mainly…', options:['Commanding','Harsh','Personal appeal in love','Legalistic'], answer:2, explain:'It is a warm, persuasive, personal appeal.', difficulty:'easy'}
+    ]
+  }
+};
+
+/*****************
+ * Storage utils  
+ *****************/
+const LS_KEYS = {
+  WRONG_NOTEBOOK: 'bq_wrong_notebook', // per-book map
+  SESSION: 'bq_session' // heavier state (answersRecord, score, etc.)
+};
+
+// Minimal cookie to satisfy "remember last state": store book + index + diff + mode
+function setStateCookie(state){
+  const data = encodeURIComponent(JSON.stringify({
+    book: state.book, idx: state.idx, diff: state.diff, mode: state.mode
+  }));
+  // 14 days
+  document.cookie = `bq_state=${data}; max-age=${60*60*24*14}; path=/`;
+}
+function getStateCookie(){
+  const m = document.cookie.match(/(?:^|; )bq_state=([^;]+)/);
+  if(!m) return null; try { return JSON.parse(decodeURIComponent(m[1])); } catch { return null; }
+}
+
+function saveSession(obj){
+  localStorage.setItem(LS_KEYS.SESSION, JSON.stringify(obj));
+}
+function loadSession(){
+  const s = localStorage.getItem(LS_KEYS.SESSION); return s? JSON.parse(s): null;
+}
+
+function saveWrong(bookKey, record){
+  const raw = localStorage.getItem(LS_KEYS.WRONG_NOTEBOOK);
+  const map = raw? JSON.parse(raw): {};
+  map[bookKey] = map[bookKey] || [];
+  map[bookKey].push(record);
+  localStorage.setItem(LS_KEYS.WRONG_NOTEBOOK, JSON.stringify(map));
+}
+function getWrongMap(){
+  const raw = localStorage.getItem(LS_KEYS.WRONG_NOTEBOOK); return raw? JSON.parse(raw): {};
+}
+function clearWrong(bookKey){
+  const raw = localStorage.getItem(LS_KEYS.WRONG_NOTEBOOK);
+  if(!raw) return; const map = JSON.parse(raw); delete map[bookKey];
+  localStorage.setItem(LS_KEYS.WRONG_NOTEBOOK, JSON.stringify(map));
+}
+
+/*****************
+ * UI elements   *
+ *****************/
+const bookSelect = document.getElementById('bookSelect');
+const diffSelect = document.getElementById('diffSelect');
+const modeSelect = document.getElementById('modeSelect');
+const startBtn = document.getElementById('startBtn');
+const resumeBtn = document.getElementById('resumeBtn');
+
+const introSec = document.getElementById('intro');
+const introTitle = document.getElementById('introTitle');
+const introMeta = document.getElementById('introMeta');
+const introBody = document.getElementById('introBody');
+
+const quizArea = document.getElementById('quizArea');
+const bookTitleEl = document.getElementById('bookTitle');
+const progressEl = document.getElementById('progress');
+const diffPill = document.getElementById('diffPill');
+const qCard = document.getElementById('qCard');
+const explainBox = document.getElementById('explainBox');
+const nextBtn = document.getElementById('nextBtn');
+const quitBtn = document.getElementById('quitBtn');
+
+const resultArea = document.getElementById('resultArea');
+const finalScore = document.getElementById('finalScore');
+const finalMsg = document.getElementById('finalMsg');
+const reviewBtn = document.getElementById('reviewBtn');
+const restartBtn = document.getElementById('restartBtn');
+
+const reviewArea = document.getElementById('reviewArea');
+const reviewList = document.getElementById('reviewList');
+const closeReviewBtn = document.getElementById('closeReviewBtn');
+const exportWrongBtn = document.getElementById('exportWrongBtn');
+const retryWrongBtn = document.getElementById('retryWrongBtn');
+const clearWrongBtn = document.getElementById('clearWrongBtn');
+
+/*****************
+ * Runtime state *
+ *****************/
+let state = {
+  bookKey: null,
+  questions: [],
+  idx: 0,
+  score: 0,
+  mode: 'normal', // or 'wrongonly'
+  diff: 'all',
+  answersRecord: [] // {q, options, answer, user, correct, explain, difficulty}
+};
+
+/*****************
+ * Intro handling *
+ *****************/
+bookSelect.addEventListener('change', renderIntro);
+function renderIntro(){
+  const k = bookSelect.value; if(!k){ introSec.classList.add('hidden'); return; }
+  const intro = bookIntros[k]; if(!intro){ introSec.classList.add('hidden'); return; }
+  introTitle.textContent = intro.title + ' — Intro';
+  introMeta.textContent = intro.meta;
+  introBody.innerHTML = `
+    <div class="mb-2"><span class="font-semibold">Background:</span> ${escapeHtml(intro.background)}</div>
+    <div class="mb-2"><span class="font-semibold">Summary:</span> ${escapeHtml(intro.summary)}</div>
+    <div class="mb-1 font-semibold">Key Characters:</div>
+    <ul class="list-disc pl-5 text-sm text-gray-700">
+      ${intro.characters.map(c=>`<li><span class="font-medium">${escapeHtml(c.name)}</span>: ${escapeHtml(c.note)}</li>`).join('')}
+    </ul>`;
+  introSec.classList.remove('hidden');
+}
+
+/*****************
+ * Start & Resume *
+ *****************/
+startBtn.addEventListener('click', () => {
+  const key = bookSelect.value; if(!key) return alert('Choose a book first.');
+  const diff = diffSelect.value; const mode = modeSelect.value;
+  startQuiz({key, diff, mode});
+});
+
+resumeBtn.addEventListener('click', () => {
+  const ck = getStateCookie();
+  const ss = loadSession();
+  if(!ck || !ss){ return alert('No saved session found in cookies.'); }
+  state = ss; // trust localStorage for heavy state
+  // Ensure dataset exists
+  if(!booksData[state.bookKey]) return alert('Book data not found.');
+  // Re-render current question
+  bookTitleEl.textContent = booksData[state.bookKey].title;
+  diffPill.textContent = labelForDiff(state.diff);
+  document.getElementById('selector').scrollIntoView({behavior:'smooth'});
+  quizArea.classList.remove('hidden');
+  resultArea.classList.add('hidden');
+  reviewArea.classList.add('hidden');
+  renderQuestion();
+});
+
+function startQuiz({key, diff, mode}){
+  state.bookKey = key; state.diff = diff; state.mode = mode; state.idx = 0; state.score = 0; state.answersRecord = [];
+  const allQ = booksData[key].questions.slice();
+  // Wrong-only mode: pull from notebook
+  if(mode === 'wrongonly'){
+    const wrongMap = getWrongMap();
+    const arr = (wrongMap[key] || []).map(r => ({...r.original}));
+    if(arr.length === 0){ alert('No wrong answers saved for this book.'); return; }
+    state.questions = arr;
+  } else {
+    // Filter by difficulty
+    const filtered = (diff==='all')? allQ : allQ.filter(q=> (q.difficulty||'easy')===diff);
+    state.questions = shuffle(filtered);
+  }
+  if(state.questions.length === 0){ alert('No questions available for this selection.'); return; }
+  bookTitleEl.textContent = booksData[key].title;
+  diffPill.textContent = labelForDiff(diff);
+  quizArea.classList.remove('hidden');
+  resultArea.classList.add('hidden');
+  reviewArea.classList.add('hidden');
+  renderQuestion();
+}
+
+/*****************
+ * Render Q/A     *
+ *****************/
+function renderQuestion(){
+  const q = state.questions[state.idx];
+  explainBox.classList.add('hidden'); explainBox.innerHTML='';
+  nextBtn.disabled = true;
+  progressEl.textContent = `${state.idx+1} / ${state.questions.length}`;
+  qCard.innerHTML = `
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-base font-semibold">${state.idx+1}. ${escapeHtml(q.question)}</div>
+      <span class="chip ${diffClass(q.difficulty)}">${escapeHtml(cap(q.difficulty||'easy'))}</span>
+    </div>
+    <div class="space-y-2">
+      ${q.options.map((opt,i)=>`
+        <button class="opt-btn w-full text-left border border-gray-200 rounded-lg opt hover:bg-blue-50 transition" data-i="${i}">
+          <div class="px-3"><span class="text-xs text-gray-500 mr-1">${String.fromCharCode(65+i)}.</span> ${escapeHtml(opt)}</div>
+        </button>
+      `).join('')}
+    </div>`;
+  Array.from(qCard.querySelectorAll('.opt')).forEach(btn=> btn.addEventListener('click', onSelect));
+  // persist minimal cookie + heavy session
+  setStateCookie({book: state.bookKey, idx: state.idx, diff: state.diff, mode: state.mode});
+  saveSession(state);
+}
+
+function onSelect(e){
+  const btn = e.currentTarget; const sel = parseInt(btn.getAttribute('data-i'));
+  const q = state.questions[state.idx]; const correct = (sel === q.answer);
+  if(correct) state.score++;
+  state.answersRecord.push({
+    q: q.question, options: q.options.slice(), answer: q.answer, user: sel,
+    correct, explain: q.explain, difficulty: q.difficulty||'easy'
+  });
+  // Visual feedback
+  Array.from(qCard.querySelectorAll('.opt')).forEach(b=>{
+    b.disabled = true; b.classList.add('opacity-80');
+    const i = parseInt(b.getAttribute('data-i'));
+    if(i === q.answer){ b.classList.add('border-2','border-green-300','bg-green-50'); }
+    if(i === sel && i !== q.answer){ b.classList.add('border-2','border-red-300','bg-red-50'); }
+  });
+  explainBox.innerHTML = `<div class="font-medium mb-1">${correct? 'Correct 🎉' : 'Not quite ✖️'}</div><div class="text-sm">${escapeHtml(q.explain||'')}</div>`;
+  explainBox.classList.remove('hidden');
+  nextBtn.disabled = false;
+  // Save wrong answers to notebook with book key
+  if(!correct){
+    saveWrong(state.bookKey, { original: q, picked: sel, at: Date.now() });
+  }
+  // persist
+  saveSession(state);
+}
+
+nextBtn.addEventListener('click', () => {
+  if(state.idx < state.questions.length - 1){
+    state.idx++;
+    renderQuestion();
+    window.scrollTo({top:0,behavior:'smooth'});
+  } else {
+    showResult();
+  }
+});
+
+quitBtn.addEventListener('click', () => {
+  if(confirm('Quit the quiz and return to the start?')) location.reload();
+});
+
+/*****************
+ * Results & Review
+ *****************/
+function showResult(){
+  quizArea.classList.add('hidden');
+  resultArea.classList.remove('hidden');
+  const total = state.questions.length; const pct = Math.round(state.score/total*100);
+  finalScore.textContent = `Score: ${state.score} / ${total} (${pct}%)`;
+  finalMsg.textContent = pct===100? 'Perfect!': pct>=80? 'Great job!': pct>=50? 'Good effort — review and try again.': 'Keep practicing — check the explanations and retry wrong answers.';
+  saveSession(state);
+}
+
+reviewBtn.addEventListener('click', ()=>{
+  resultArea.classList.add('hidden');
+  reviewArea.classList.remove('hidden');
+  renderReview();
+});
+
+restartBtn.addEventListener('click', ()=> location.reload());
+closeReviewBtn.addEventListener('click', ()=>{ reviewArea.classList.add('hidden'); resultArea.classList.remove('hidden'); });
+
+function renderReview(){
+  reviewList.innerHTML = '';
+  state.answersRecord.forEach((r, idx)=>{
+    const div = document.createElement('div');
+    div.className = 'p-3 border border-gray-100 rounded-lg';
+    const userOpt = r.user != null ? String.fromCharCode(65 + r.user) : '(no answer)';
+    const correctOpt = String.fromCharCode(65 + r.answer);
+    div.innerHTML = `
+      <div class="flex items-center justify-between">
+        <div class="font-medium mb-1">${idx+1}. ${escapeHtml(r.q)}</div>
+        <span class="chip ${diffClass(r.difficulty)}">${escapeHtml(cap(r.difficulty))}</span>
+      </div>
+      <div class="text-sm text-gray-700 mb-2">
+        Yours: <span class="${r.correct? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}">${escapeHtml(userOpt)}</span>
+        &nbsp; Correct: <span class="font-semibold">${escapeHtml(correctOpt)}</span>
+      </div>
+      <div class="text-sm text-gray-700">${escapeHtml(r.explain||'')}</div>`;
+    reviewList.appendChild(div);
+  });
+}
+
+retryWrongBtn.addEventListener('click', ()=>{
+  const k = state.bookKey; const map = getWrongMap();
+  const wrongArr = (map[k]||[]).map(r=> ({...r.original}));
+  if(wrongArr.length===0){ alert('No wrong answers saved for this book.'); return; }
+  state.mode = 'wrongonly'; state.idx = 0; state.score = 0; state.answersRecord = []; state.questions = shuffle(wrongArr);
+  reviewArea.classList.add('hidden');
+  quizArea.classList.remove('hidden');
+  renderQuestion();
+});
+
+clearWrongBtn.addEventListener('click', ()=>{
+  if(confirm('Clear the wrong-answer notebook for this book?')){ clearWrong(state.bookKey); alert('Wrong-answer notebook cleared.'); }
+});
+
+exportWrongBtn.addEventListener('click', ()=>{
+  const k = state.bookKey; const map = getWrongMap();
+  const rows = (map[k]||[]).map(x=>({question:x.original.question, options:x.original.options, answer:x.original.answer, picked:x.picked}));
+  const blob = new Blob([JSON.stringify(rows,null,2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${k}-wrong-notebook.json`; a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+/*****************
+ * Helpers        *
+ *****************/
+function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
+function labelForDiff(d){ return d==='all'? 'All' : cap(d); }
+function cap(s){ return (s||'').charAt(0).toUpperCase()+ (s||'').slice(1); }
+function diffClass(d){
+  switch(d){
+    case 'easy': return 'bg-green-50 border-green-200 text-green-700';
+    case 'medium': return 'bg-amber-50 border-amber-200 text-amber-700';
+    case 'hard': return 'bg-red-50 border-red-200 text-red-700';
+    default: return 'bg-slate-50 border-slate-200 text-slate-700';
+  }
+}
+function escapeHtml(s){ if(s==null) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+</script>
+</body>
+</html>
