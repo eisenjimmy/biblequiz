@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-  <title>Bible Quiz (Mobile) — Samuel / Ephesians / Philippians / Colossians / Philemon</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+  <title>Bible Quiz (Mobile) — 120 Questions</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     html,body{height:100%}
     body{background:linear-gradient(180deg,#f8fafc,#eef2ff);-webkit-font-smoothing:antialiased}
-    .app{max-width:720px;margin:0 auto;padding:18px;min-height:100vh;display:flex;flex-direction:column}
-    .card{box-shadow:0 8px 28px rgba(8,30,78,.07)}
+    .app{max-width:720px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;padding:16px}
+    .card{background:#fff;border-radius:16px;box-shadow:0 8px 28px rgba(12,35,89,.06)}
     .opt-btn{padding-top:14px;padding-bottom:14px}
     .explain{background:#fff;border-left:4px solid #0ea5e9;padding:12px;border-radius:8px}
     .chip{border-radius:9999px;padding:.25rem .6rem;border:1px solid #e5e7eb;font-size:.75rem}
@@ -18,16 +18,16 @@
 <body>
 <div class="app">
   <header class="mb-4">
-    <div class="card bg-white rounded-2xl p-4">
-      <h1 class="text-2xl font-semibold text-center">Bible Quiz — Mobile</h1>
-      <p class="text-sm text-center text-gray-600 mt-1">1 Samuel · 2 Samuel · Ephesians · Philippians · Colossians · Philemon</p>
-      <p class="text-xs text-center text-gray-500">Features: wrong-answer notebook, cookie save-state, difficulty filter, chapter intros.</p>
+    <div class="card p-4">
+      <h1 class="text-2xl font-semibold text-center">Bible Quiz (English)</h1>
+      <p class="text-sm text-center text-gray-600 mt-1">1 Samuel · 2 Samuel · Ephesians · Philippians · Colossians · Philemon (20 questions each)</p>
+      <p class="text-xs text-center text-gray-500">Wrong-answer notebook · Resume (cookies/localStorage) · Difficulty filter · Chapter intros</p>
     </div>
   </header>
 
   <main class="flex-1">
-    <!-- Book & Mode selector -->
-    <section class="card bg-white rounded-2xl p-4 mb-4" id="selector">
+    <!-- Selector -->
+    <section class="card p-4 mb-4" id="selector">
       <div class="grid grid-cols-1 gap-3">
         <label class="block text-sm font-medium text-gray-700">Choose a Book</label>
         <select id="bookSelect" class="w-full rounded-lg border-gray-200 shadow-sm p-3">
@@ -51,32 +51,32 @@
             </select>
           </div>
           <div>
-            <label class="block text-sm font-medium text-gray-700">Question Mode</label>
+            <label class="block text-sm font-medium text-gray-700">Mode</label>
             <select id="modeSelect" class="w-full rounded-lg border-gray-200 shadow-sm p-3">
               <option value="normal">All Questions</option>
-              <option value="wrongonly">Wrong-Answer Review</option>
+              <option value="wrongonly">Wrong-answer Review</option>
             </select>
           </div>
         </div>
 
         <div class="flex gap-2 mt-3">
-          <button id="startBtn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-semibold">Start Quiz</button>
-          <button id="resumeBtn" class="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-3">Resume (from cookies)</button>
+          <button id="startBtn" class="flex-1 bg-blue-600 text-white rounded-lg py-3 font-semibold">Start</button>
+          <button id="resumeBtn" class="flex-1 bg-white border border-gray-200 text-gray-700 rounded-lg py-3">Resume (cookies)</button>
         </div>
       </div>
     </section>
 
-    <!-- Chapter Intro -->
-    <section class="card bg-white rounded-2xl p-4 mb-4 hidden" id="intro">
+    <!-- Intro -->
+    <section class="card p-4 mb-4 hidden" id="intro">
       <div class="flex items-center justify-between mb-2">
-        <h2 class="font-semibold" id="introTitle">Book Intro</h2>
+        <h2 class="font-semibold" id="introTitle">Intro</h2>
         <span id="introMeta" class="chip text-gray-600"></span>
       </div>
       <div class="text-sm text-gray-800" id="introBody"></div>
     </section>
 
-    <!-- Quiz Area -->
-    <section id="quizArea" class="hidden card bg-white rounded-2xl p-4">
+    <!-- Quiz -->
+    <section id="quizArea" class="hidden card p-4">
       <div class="flex items-center justify-between mb-3">
         <div class="text-sm text-gray-600" id="bookTitle"></div>
         <div class="text-sm text-gray-600 flex items-center gap-2">
@@ -95,7 +95,7 @@
     </section>
 
     <!-- Results -->
-    <section id="resultArea" class="hidden card bg-white rounded-2xl p-4 mt-4">
+    <section id="resultArea" class="hidden card p-4 mt-4">
       <div class="text-center mb-3">
         <div class="text-lg font-bold" id="finalScore"></div>
         <div class="text-sm text-gray-600" id="finalMsg"></div>
@@ -106,8 +106,8 @@
       </div>
     </section>
 
-    <!-- Review list -->
-    <section id="reviewArea" class="hidden card bg-white rounded-2xl p-4 mt-4">
+    <!-- Review -->
+    <section id="reviewArea" class="hidden card p-4 mt-4">
       <div class="flex items-center justify-between mb-2">
         <h3 class="font-semibold">Answer Review</h3>
         <button id="exportWrongBtn" class="chip bg-yellow-50 border-yellow-200 text-yellow-700">Export Wrong Notebook</button>
@@ -115,65 +115,65 @@
       <div id="reviewList" class="space-y-3 max-h-[52vh] overflow-auto pr-2"></div>
       <div class="mt-3 grid grid-cols-1 gap-2">
         <button id="closeReviewBtn" class="w-full bg-gray-100 rounded-lg py-3">Close</button>
-        <button id="retryWrongBtn" class="w-full bg-orange-600 text-white rounded-lg py-3">Retry Wrong Answers</button>
+        <button id="retryWrongBtn" class="w-full bg-orange-600 text-white rounded-lg py-3">Retry Wrong Only</button>
         <button id="clearWrongBtn" class="w-full bg-white border border-gray-200 rounded-lg py-3">Clear Wrong Notebook</button>
       </div>
     </section>
   </main>
 
   <footer class="mt-4 text-center text-xs text-gray-500">
-    Works offline once opened. State saved in cookies/localStorage.
+    Works offline. Progress saved to cookies/localStorage.
   </footer>
 </div>
 
 <script>
 /********************
- * Data: Book intros
+ * Book intros
  ********************/
 const bookIntros = {
   '1sam': {
     title: '1 Samuel',
     meta: 'Author(s): Samuel (parts), Nathan, Gad · Period: late 11th c. BC',
-    background: 'Israel transitions from judges to monarchy. Samuel rises as a prophet; Saul becomes the first king; David emerges.',
-    summary: 'Covers Hannah and Samuel, Israel\'s demand for a king, Saul\'s rise and fall, and David\'s early victories (Goliath) and trials under Saul.',
+    background: 'Transition from the judges to a monarchy. Samuel rises as prophet; Saul becomes the first king; David emerges.',
+    summary: 'Hannah’s prayer and Samuel’s birth, Israel’s demand for a king, Saul’s disobedience and rejection, David anointed, Goliath defeated, Saul’s jealousy and pursuit.',
     characters: [
-      {name:'Samuel', note:'Prophet/priest who anoints Saul and later David.'},
-      {name:'Saul', note:'Israel\'s first king; disobeys and is rejected.'},
+      {name:'Samuel', note:'Prophet/priest; anoints Saul and David.'},
+      {name:'Saul', note:'First king; rejected for disobedience.'},
       {name:'David', note:'Shepherd anointed as future king; slays Goliath.'},
-      {name:'Hannah', note:'Mother of Samuel; model of prayer.'},
-      {name:'Jonathan', note:'Saul\'s son; loyal friend to David.'},
+      {name:'Hannah', note:'Samuel’s mother; model of prayer.'},
+      {name:'Jonathan', note:'Saul’s son; loyal friend to David.'}
     ]
   },
   '2sam': {
     title: '2 Samuel',
     meta: 'Author(s): Nathan, Gad (trad.) · Period: early 10th c. BC',
-    background: 'David\'s reign over a united Israel from Jerusalem; great victories as well as moral failure and family turmoil.',
-    summary: 'David becomes king, captures Jerusalem, brings the Ark; sins with Bathsheba; faces Absalom\'s revolt; ends with judgments and psalms.',
+    background: 'David’s reign: victories and expansion, moral failure and family tragedy, repentance and restoration.',
+    summary: 'David crowned king; conquers Jerusalem; brings the Ark; sins with Bathsheba; Absalom’s revolt; census and plague; concluding psalms and episodes.',
     characters: [
       {name:'David', note:'King of Israel; poet, warrior, penitent.'},
       {name:'Nathan', note:'Prophet who confronts David.'},
-      {name:'Joab', note:'David\'s general; capable yet ruthless.'},
-      {name:'Absalom', note:'David\'s son who rebels against him.'},
-      {name:'Bathsheba', note:'Wife of Uriah; later wife of David.'},
+      {name:'Joab', note:'David’s general; capable yet ruthless.'},
+      {name:'Absalom', note:'David’s son who rebels.'},
+      {name:'Bathsheba', note:'Uriah’s wife; later David’s wife.'}
     ]
   },
   'eph': {
     title: 'Ephesians',
     meta: 'Author: Paul · Date: c. AD 60–62 (Roman custody)',
-    background: 'Circular epistle emphasizing the church’s identity in Christ and unity of Jews and Gentiles.',
-    summary: 'The believer\'s riches in Christ (chs. 1–3) and the believer\'s walk (chs. 4–6): unity, maturity, household codes, and the armor of God.',
+    background: 'Identity of the church in Christ and unity of Jews and Gentiles; maturity and spiritual warfare.',
+    summary: 'Chs. 1–3: riches in Christ and the “mystery”; Chs. 4–6: walk in unity and holiness, household codes, armor of God.',
     characters: [
-      {name:'Paul', note:'Apostle; the letter\'s author.'},
-      {name:'Ephesians', note:'Gentile-majority believers called to unity and maturity.'}
+      {name:'Paul', note:'Apostle and author.'},
+      {name:'Ephesian believers', note:'Gentile-majority church called to unity and maturity.'}
     ]
   },
   'phil': {
     title: 'Philippians',
     meta: 'Author: Paul · Date: c. AD 60–62 (Roman custody)',
-    background: 'A warm, joyful letter to the church at Philippi, partners in the gospel.',
-    summary: 'Themes of joy, partnership, humility (Christ hymn), perseverance, and contentment in all circumstances.',
+    background: 'Warm, joyful letter to gospel partners in Philippi.',
+    summary: 'Joy, partnership, the Christ-hymn (humility), perseverance, contentment, prayer over anxiety.',
     characters: [
-      {name:'Paul', note:'Author; rejoices despite imprisonment.'},
+      {name:'Paul', note:'Rejoices despite imprisonment.'},
       {name:'Timothy', note:'Trusted coworker sent to Philippi.'},
       {name:'Epaphroditus', note:'Messenger who risked his life to serve Paul.'}
     ]
@@ -181,123 +181,206 @@ const bookIntros = {
   'col': {
     title: 'Colossians',
     meta: 'Author: Paul · Date: c. AD 60–62 (Roman custody)',
-    background: 'Addresses false teaching by exalting Christ\'s supremacy and sufficiency.',
-    summary: 'Christ is the image of God and head of the church; believers are to put off the old self, put on the new, and live prayerfully and wisely.',
+    background: 'Exalts Christ’s supremacy/sufficiency while warning against hollow philosophy, legalism, and syncretism.',
+    summary: 'Christ as image of God and head of the church; put off the old self, put on the new; prayerful, wise living.',
     characters: [
-      {name:'Paul', note:'Author; defends Christ\'s supremacy.'},
+      {name:'Paul', note:'Author; contends for Christ’s supremacy.'},
       {name:'Epaphras', note:'Founder/servant to the Colossians.'},
-      {name:'Colossian believers', note:'Warned against hollow philosophy and legalism.'}
+      {name:'Colossian believers', note:'Warned against deceptive teachings.'}
     ]
   },
   'phm': {
     title: 'Philemon',
     meta: 'Author: Paul · Date: c. AD 60–62 (Roman custody)',
-    background: 'A personal letter about reconciliation regarding Onesimus, a runaway slave.',
-    summary: 'Paul appeals to Philemon to receive Onesimus as a beloved brother, modeling gospel-shaped forgiveness and partnership.',
+    background: 'Personal appeal for reconciliation regarding Onesimus, a runaway slave.',
+    summary: 'Paul urges Philemon to receive Onesimus as a beloved brother; the gospel reshapes relationships.',
     characters: [
       {name:'Philemon', note:'Recipient; respected Christian host.'},
       {name:'Onesimus', note:'Former slave; converted helper to Paul.'},
-      {name:'Paul', note:'Author; intercedes for Onesimus.'}
+      {name:'Paul', note:'Author; intercedes in love.'}
     ]
   }
 };
 
 /*************************
- * Data: Question banks  *
- * Each: {question, options[4], answer (index), explain, difficulty}
+ * Question bank (20 each)
+ * {question, options[4], answer (index), explain, difficulty: 'Easy'|'Medium'|'Hard'}
  *************************/
-// NOTE: For brevity, each book below includes a compact sample. Replace with your full 20 per book.
 const booksData = {
   '1sam': {
     title: '1 Samuel',
     questions: [
-      {question:'Who was Samuel\'s mother?', options:['Miriam','Hannah','Naomi','Mary'], answer:1, explain:'Hannah prayed earnestly and the Lord gave Samuel.', difficulty:'easy'},
-      {question:'Israel\'s first anointed king was…', options:['David','Saul','Solomon','Ahab'], answer:1, explain:'Saul was anointed after Israel demanded a king.', difficulty:'easy'},
-      {question:'David defeated Goliath with a…', options:['Sword','Spear','Sling and stone','Bow'], answer:2, explain:'David used a sling and a stone (1 Sam 17).', difficulty:'easy'},
-      {question:'Why was Saul rejected by the Lord in 1 Samuel?', options:['Did not pray','False prophecy','Failed to fully destroy Amalek','Cowardice'], answer:2, explain:'He disobeyed God\'s command concerning Amalek.', difficulty:'medium'},
-      {question:'Jonathan was…', options:['Saul\'s general','Saul\'s son and David\'s friend','A Philistine prince','A priest'], answer:1, explain:'Jonathan, Saul\'s son, loved David as a friend.', difficulty:'easy'}
+      {question:"Who was Samuel's mother?", options:["Miriam","Hannah","Naomi","Ruth"], answer:1, explain:"Hannah prayed a vow; the Lord gave Samuel whom she dedicated (1 Sam 1).", difficulty:"Easy"},
+      {question:"Under which priest did Samuel minister as a boy?", options:["Aaron","Eli","Zadok","Zechariah"], answer:1, explain:"Samuel grew up under Eli at Shiloh (1 Sam 2–3).", difficulty:"Easy"},
+      {question:"Samuel was taught to reply to God's call with which words?", options:["Here I am","Speak, for your servant is listening","Lord, have mercy","Thy will be done"], answer:1, explain:'Eli coached him to answer, “Speak, for your servant is listening” (1 Sam 3:10).', difficulty:"Easy"},
+      {question:"Who was Israel's first anointed king?", options:["David","Saul","Solomon","Jeroboam"], answer:1, explain:"Saul was anointed when Israel demanded a king (1 Sam 9–10).", difficulty:"Easy"},
+      {question:"The primary reason God rejected Saul was:", options:["Lack of prayer","Failure to fully destroy Amalek","Weak army","Tax issues"], answer:1, explain:"He disobeyed God’s command concerning Amalek (1 Sam 15).", difficulty:"Medium"},
+      {question:"With what did David strike down Goliath?", options:["Sword","Spear","Sling and stone","Bow"], answer:2, explain:"David used a sling and a stone, then finished with Goliath’s sword (1 Sam 17).", difficulty:"Easy"},
+      {question:"David’s father was:", options:["Obed","Jesse","Boaz","Elimelech"], answer:1, explain:"David was the son of Jesse of Bethlehem (1 Sam 16:1).", difficulty:"Easy"},
+      {question:"Saul’s son who formed a covenant friendship with David:", options:["Mephibosheth","Jonathan","Ish-bosheth","Absalom"], answer:1, explain:"Jonathan loved David as his own soul (1 Sam 18–20).", difficulty:"Easy"},
+      {question:"Why did Saul grow jealous of David?", options:["He coveted the throne","The people’s songs of praise","Prophecy about David","Tax disputes"], answer:1, explain:'“Saul has slain his thousands, and David his tens of thousands” (1 Sam 18:7).', difficulty:"Easy"},
+      {question:"Which phrase captures the spiritual climate at the start of 1 Samuel?", options:["Prophetic abundance","Peace and revival","The word of the LORD was rare","Idolatry eradicated"], answer:2, explain:"‘The word of the LORD was rare; visions were infrequent’ (1 Sam 3:1).", difficulty:"Medium"},
+      {question:"What sacred object did Israel carry into battle against the Philistines?", options:["Tabernacle","Ark of the Covenant","Altar of incense","Lampstand"], answer:1, explain:"They brought the Ark but it was captured (1 Sam 4).", difficulty:"Medium"},
+      {question:"The Ark’s return involved which of the following (NOT)?", options:["Plague of tumors","Golden tumors and golden mice","New cart drawn by milch cows","Crossing the Jordan River"], answer:3, explain:"Crossing the Jordan belongs to Joshua; the Ark was returned on a new cart (1 Sam 5–6).", difficulty:"Hard"},
+      {question:"At Gilgal, Saul sinned by:", options:["Idolatry","Offering the burnt offering himself","Killing a priest","Making a false oath"], answer:1, explain:"He offered the offering without waiting for Samuel (1 Sam 13).", difficulty:"Medium"},
+      {question:"Whom did Samuel anoint to be the next king?", options:["David","Jonathan","Abner","Ish-bosheth"], answer:0, explain:"God looks at the heart; Samuel anointed David (1 Sam 16).", difficulty:"Easy"},
+      {question:"Who wisely averted David’s bloodshed in the Nabal incident?", options:["Michal","Abigail","Rebekah","Rahab"], answer:1, explain:"Abigail’s intercession turned David from vengeance (1 Sam 25).", difficulty:"Medium"},
+      {question:"Where did Saul consult a medium?", options:["En-dor","Gilgal","Mizpah","Shiloh"], answer:0, explain:"He sought the medium of En-dor (1 Sam 28).", difficulty:"Medium"},
+      {question:"Why did David refuse to kill Saul?", options:["He feared Saul","Insufficient proof","He was the LORD’s anointed","Jonathan forbade it"], answer:2, explain:"David would not harm the LORD’s anointed (1 Sam 24, 26).", difficulty:"Medium"},
+      {question:"On which mountain did Saul meet his end?", options:["Gilboa","Carmel","Zion","Ebal"], answer:0, explain:"Saul died on Mount Gilboa in battle (1 Sam 31).", difficulty:"Easy"},
+      {question:"Best summary of 1 Samuel’s theme:", options:["Temple construction","Rise of monarchy and the cost of dis/obedience","Exile to Babylon","Legal code development"], answer:1, explain:"It traces the monarchy’s rise and the fruits of obedience vs. disobedience.", difficulty:"Medium"},
+      {question:"Samuel’s initial response to Israel’s demand for a king:", options:["He rejoiced","He grieved and prayed","He instantly agreed","He resigned"], answer:1, explain:"Samuel prayed and sought the Lord (1 Sam 8).", difficulty:"Easy"}
     ]
   },
+
   '2sam': {
     title: '2 Samuel',
     questions: [
-      {question:'Central figure of 2 Samuel?', options:['Saul','David','Solomon','Samuel'], answer:1, explain:'2 Samuel focuses on David\'s reign.', difficulty:'easy'},
-      {question:'Prophet who confronted David over Bathsheba:', options:['Samuel','Nathan','Elijah','Jeremiah'], answer:1, explain:'Nathan confronted David, leading to repentance.', difficulty:'medium'},
-      {question:'Absalom was…', options:['David\'s brother','David\'s son who rebelled','A priest','A general'], answer:1, explain:'Absalom led a revolt against David.', difficulty:'easy'},
-      {question:'Consequence of David\'s census:', options:['Famine','Plague','Earthquake','Exile'], answer:1, explain:'A plague struck as judgment.', difficulty:'medium'},
-      {question:'Joab was…', options:['A prophet','David\'s general','A Philistine king','A priest'], answer:1, explain:'Joab served as David\'s commander.', difficulty:'easy'}
+      {question:"Who is the central figure of 2 Samuel?", options:["Saul","David","Solomon","Samuel"], answer:1, explain:"2 Samuel narrates David’s reign.", difficulty:"Easy"},
+      {question:"Which city did David make his capital?", options:["Hebron","Jerusalem","Jericho","Samaria"], answer:1, explain:"David captured Jerusalem and established his throne there (2 Sam 5).", difficulty:"Easy"},
+      {question:"Which sacred object was brought to Jerusalem with rejoicing?", options:["Altar of incense","Ark of the Covenant","Bronze serpent","Ephod"], answer:1, explain:"David brought up the Ark with celebration (2 Sam 6).", difficulty:"Easy"},
+      {question:"The Davidic covenant (promise of a lasting house) appears in:", options:["2 Sam 3","2 Sam 5","2 Sam 7","2 Sam 9"], answer:2, explain:"God promises David an enduring dynasty (2 Sam 7).", difficulty:"Medium"},
+      {question:"Who confronted David over his sin with Bathsheba?", options:["Elisha","Samuel","Nathan","Gad"], answer:2, explain:"The prophet Nathan reproved David (2 Sam 12).", difficulty:"Easy"},
+      {question:"Bathsheba’s husband was:", options:["Uriah","Joab","Abner","Hiram"], answer:0, explain:"Uriah the Hittite (2 Sam 11).", difficulty:"Easy"},
+      {question:"David’s census resulted in a:", options:["Earthquake","Plague","Famine","Exile"], answer:1, explain:"A plague came as judgment (2 Sam 24).", difficulty:"Medium"},
+      {question:"What happened to Uzzah when he touched the Ark?", options:["He was healed","He died","He was blessed","He was captured"], answer:1, explain:"Uzzah died for touching the Ark irreverently (2 Sam 6:6–7).", difficulty:"Medium"},
+      {question:"Mephibosheth was:", options:["Saul’s son and David’s rival","Jonathan’s son shown David’s kindness","Zadok’s brother","Absalom’s son"], answer:1, explain:"Mephibosheth received covenant kindness (2 Sam 9).", difficulty:"Medium"},
+      {question:"During Absalom’s revolt David:", options:["Fought immediately","Withdrew from Jerusalem","Fled to Babylon","Appealed to Saul"], answer:1, explain:"He evacuated Jerusalem to regroup (2 Sam 15).", difficulty:"Medium"},
+      {question:"Absalom’s death:", options:["Exile","Assassination in bed","Died in battle","Pardoned and returned"], answer:2, explain:"His head caught in a tree; Joab had him killed (2 Sam 18).", difficulty:"Easy"},
+      {question:"Joab is best described as:", options:["Gentle mediator","Capable yet hard and calculating","Cowardly soldier","Prophet"], answer:1, explain:"Joab was effective but often ruthless.", difficulty:"Medium"},
+      {question:"Which topic is least central to 2 Samuel?", options:["Establishment of kingship","Sin and repentance","Family conflicts","Temple completion"], answer:3, explain:"Temple construction comes later (Kings/Chronicles).", difficulty:"Hard"},
+      {question:"Abigail’s story is found in:", options:["1 Samuel","2 Samuel"], answer:0, explain:"The Abigail–Nabal account is in 1 Sam 25.", difficulty:"Medium"},
+      {question:"Which of the following was NOT David’s military leader?", options:["Joab","Abishai","Zadok","Benaiah"], answer:2, explain:"Zadok was a priest; the others were commanders.", difficulty:"Medium"},
+      {question:"David’s dancing before the Ark showed:", options:["Concern for image","Humble worship before the LORD","Political theater","Sorrow"], answer:1, explain:"David humbled himself in worship (2 Sam 6).", difficulty:"Easy"},
+      {question:"After Amnon’s violation of Tamar, Absalom:", options:["Forgave him","Killed Amnon","Went into exile then returned","Became a priest"], answer:1, explain:"Absalom murdered Amnon, later fled (2 Sam 13).", difficulty:"Medium"},
+      {question:"Ahithophel sided with:", options:["David","Absalom","Joab","Zadok"], answer:1, explain:"He supported Absalom and later killed himself (2 Sam 16–17).", difficulty:"Hard"},
+      {question:"Why did David buy Araunah’s threshing floor?", options:["Palace site","To build an altar and offer sacrifice","Armory","Royal tombs"], answer:1, explain:"He purchased it to build an altar during the plague (2 Sam 24).", difficulty:"Medium"},
+      {question:"A concluding lesson of 2 Samuel:", options:["We need a flawless human king","Restoration comes through repentance","War is pointless","Tax reform is key"], answer:1, explain:"Repentance and grace lead to restoration.", difficulty:"Medium"}
     ]
   },
+
   'eph': {
     title: 'Ephesians',
     questions: [
-      {question:'Author of Ephesians?', options:['Peter','John','Paul','James'], answer:2, explain:'Paul wrote Ephesians during custody (AD 60–62).', difficulty:'easy'},
-      {question:'The church is described as Christ\'s…', options:['Army','Body','Palace','Chariot'], answer:1, explain:'Ephesians emphasizes the body metaphor.', difficulty:'easy'},
-      {question:'The “armor of God” appears in chapter…', options:['3','4','5','6'], answer:3, explain:'Spiritual warfare and God\'s armor are in Eph 6.', difficulty:'easy'},
-      {question:'Salvation is by…', options:['Works','Law','Grace through faith','Birthright'], answer:2, explain:'By grace through faith (Eph 2:8–9).', difficulty:'easy'},
-      {question:'“One Lord, one faith, one baptism” is in Eph…', options:['2','3','4','5'], answer:2, explain:'Unity theme in chapter 4.', difficulty:'easy'}
+      {question:"Who is the author of Ephesians?", options:["Peter","John","Paul","James"], answer:2, explain:"Traditionally Paul, likely during Roman custody.", difficulty:"Easy"},
+      {question:"The church is described as Christ’s:", options:["Army","Body","Palace","City"], answer:1, explain:"Ephesians emphasizes the body metaphor (1:22–23).", difficulty:"Easy"},
+      {question:"Salvation is received:", options:["By works","By law","By grace through faith","By birthright"], answer:2, explain:"By grace through faith (Eph 2:8–9).", difficulty:"Easy"},
+      {question:"“One Lord, one faith, one baptism” appears in chapter:", options:["2","3","4","5"], answer:2, explain:"Unity theme in chapter 4.", difficulty:"Easy"},
+      {question:"The ‘armor of God’ is in chapter:", options:["3","4","5","6"], answer:3, explain:"Spiritual warfare and armor in Eph 6.", difficulty:"Easy"},
+      {question:"The sealing of the Holy Spirit signifies:", options:["A spiritual gift of tongues","Guarantee/pledge of salvation","Ordination to office","Re-baptism"], answer:1, explain:"The Spirit’s seal is the pledge of our inheritance (1:13–14).", difficulty:"Medium"},
+      {question:"Husband–wife ethics are modeled on:", options:["King–subject","Christ and the church","Teacher–disciple","Older–younger"], answer:1, explain:"Eph 5 compares marriage to Christ and the church.", difficulty:"Easy"},
+      {question:"Offices/gifts are given to the church to:", options:["Confer status","Build up and mature the body","Amass wealth","Control politics"], answer:1, explain:"For equipping the saints and unity (4:11–13).", difficulty:"Medium"},
+      {question:"Ephesians 2 highlights reconciliation between:", options:["Jews and Samaritans","Jews and Gentiles","Romans and Jews","Pharisees and Sadducees"], answer:1, explain:"In Christ, Jew and Gentile are one new humanity.", difficulty:"Medium"},
+      {question:"Best description of Ephesians’ structure:", options:["Doctrine → Exhortation","History → Psalms","Prophecy → Law","Biography → Proverbs"], answer:0, explain:"Chs. 1–3 doctrine; 4–6 application.", difficulty:"Medium"},
+      {question:"Our struggle is against:", options:["Flesh and blood","The rulers/powers of darkness","Nature","Government"], answer:1, explain:"Against spiritual forces of evil (6:12).", difficulty:"Medium"},
+      {question:"Spirit-filled living includes:", options:["Drunkenness","Psalms, hymns, spiritual songs","Outbursts of anger","Grumbling"], answer:1, explain:"Sing and give thanks; mutual submission (5:18–21).", difficulty:"Medium"},
+      {question:"Putting on the new self involves virtues such as:", options:["Greed","Truthfulness, gentleness, love","Jealousy","Falsehood"], answer:1, explain:"Put off the old; put on the new (Eph 4).", difficulty:"Medium"},
+      {question:"Which posture toward prayer is NOT urged?", options:["Be alert","Pray for all the saints","With thanksgiving","Hypocrisy/ostentation"], answer:3, explain:"Prayer should be sincere and vigilant (6:18).", difficulty:"Easy"},
+      {question:"Primary audience of Ephesians:", options:["Jews only","Gentiles only","Mixed Jewish–Gentile believers","Roman soldiers"], answer:2, explain:"Written to a diverse church community.", difficulty:"Medium"},
+      {question:"Spiritual blessings are located:", options:["On earth","In the heavenly places","In the temple","On mountains"], answer:1, explain:"Every spiritual blessing in the heavenly places (1:3).", difficulty:"Medium"},
+      {question:"“Do not let the sun go down on your anger” teaches:", options:["Never be angry","Don’t harbor anger; deal with it quickly","Seek revenge","Be silent"], answer:1, explain:"Don’t give the devil a foothold (4:26–27).", difficulty:"Medium"},
+      {question:"The ‘mystery’ highlights:", options:["Baptismal procedure","Communion liturgy","Gentile inclusion as co-heirs","Temple blueprint"], answer:2, explain:"Gentiles are fellow heirs in Christ (Eph 3).", difficulty:"Hard"},
+      {question:"Members as Christ’s body should:", options:["Deceive one another","Bear with one another in love","Compete","Ignore each other"], answer:1, explain:"Maintain the unity of the Spirit in peace (4:2–3).", difficulty:"Easy"},
+      {question:"The ‘shield of faith’ quenches:", options:["Swords and spears","The evil one’s flaming arrows","Disease","Poverty"], answer:1, explain:"Faith deflects temptations and doubts (6:16).", difficulty:"Easy"}
     ]
   },
+
   'phil': {
     title: 'Philippians',
     questions: [
-      {question:'Main theme of Philippians?', options:['Sorrow','Joy','Law','Judgment'], answer:1, explain:'Joy and partnership in the gospel permeate the letter.', difficulty:'easy'},
-      {question:'Paul wrote Philippians from…', options:['Ephesus','Rome (custody)','Jerusalem','Antioch'], answer:1, explain:'Likely from Roman imprisonment (AD 60–62).', difficulty:'easy'},
-      {question:'The Christ-hymn (humility) is in chapter…', options:['1','2','3','4'], answer:1, explain:'Christ\'s humility and exaltation, Phil 2.', difficulty:'medium'},
-      {question:'“I can do all things…” is Phil…', options:['1:6','2:10','4:13','3:8'], answer:2, explain:'Philippians 4:13.', difficulty:'easy'},
-      {question:'Epaphroditus was…', options:['A prophet','A messenger who served Paul','A soldier','A judge'], answer:1, explain:'He risked his life to help Paul.', difficulty:'easy'}
+      {question:"Main theme of Philippians:", options:["Despair","Joy","Law","Punishment"], answer:1, explain:"Joy and gospel partnership permeate the letter.", difficulty:"Easy"},
+      {question:"From where did Paul likely write Philippians?", options:["Ephesus","Rome (custody)","Jerusalem","Antioch"], answer:1, explain:"Many date it to Roman imprisonment (AD 60–62).", difficulty:"Medium"},
+      {question:"The Christ-hymn of humility is in chapter:", options:["1","2","3","4"], answer:1, explain:"Christ’s self-emptying and exaltation (Phil 2).", difficulty:"Easy"},
+      {question:"“I can do all things …” is Philippians:", options:["1:6","2:10","4:13","3:8"], answer:2, explain:"Phil 4:13.", difficulty:"Easy"},
+      {question:"Paul’s counsel for anxiety:", options:["Endure it","Get angry","Prayer and supplication with thanksgiving","Escape"], answer:2, explain:"Prayer with thanksgiving brings God’s peace (4:6–7).", difficulty:"Easy"},
+      {question:"In which chapter does Paul say he learned contentment?", options:["1","2","3","4"], answer:3, explain:"He learned to be content in any circumstance (4:11–13).", difficulty:"Easy"},
+      {question:"Who is Epaphroditus?", options:["A priest","Messenger who served Paul","A general","A tax collector"], answer:1, explain:"He risked his life to care for Paul (2:25–30).", difficulty:"Medium"},
+      {question:"Which attitude is NOT commended in Philippians?", options:["Humility","Gospel cooperation","Jealousy","Self-giving love"], answer:2, explain:"Selfish ambition and rivalry are warned against (2:3).", difficulty:"Easy"},
+      {question:"Paul’s life goal:", options:["Self-glory","To gain Christ and know Him","Wealth accumulation","Political power"], answer:1, explain:"Surpassing worth of knowing Christ (3:8–10).", difficulty:"Medium"},
+      {question:"Paul’s feelings toward the Philippian church:", options:["Disappointment","Joy and gratitude","Fear","Indifference"], answer:1, explain:"He thanks them for partnership and support.", difficulty:"Easy"},
+      {question:"Effect of Paul’s chains (Phil 1):", options:["Gospel hindered","Gospel advanced","Church collapse","Division"], answer:1, explain:"His imprisonment actually advanced the gospel (1:12).", difficulty:"Medium"},
+      {question:"Christ’s example to imitate:", options:["Asserting rights","Humility and obedience","Self-defense","Boasting in wisdom"], answer:1, explain:"He emptied Himself, became obedient to death (2:5–8).", difficulty:"Easy"},
+      {question:"“Press on toward the goal” is in:", options:["1","2","3","4"], answer:2, explain:"For the prize of the upward call (3:13–14).", difficulty:"Medium"},
+      {question:"Practices tied to the promise of God’s peace:", options:["Quarreling","Worrying","Prayer, thanksgiving, right thinking","Isolation"], answer:2, explain:"4:6–9 connects prayerful gratitude and thinking on what is excellent.", difficulty:"Medium"},
+      {question:"Euodia and Syntyche are urged to:", options:["Compete","Be of the same mind","Separate","Be silent"], answer:1, explain:"“Agree in the Lord” (4:2).", difficulty:"Medium"},
+      {question:"Where does Paul explicitly command rejoicing again?", options:["1","2","3","4"], answer:3, explain:'“Rejoice in the Lord always … again I will say, rejoice” (4:4).', difficulty:"Easy"},
+      {question:"Paul’s stance toward money:", options:["Greed","Contentment","Wastefulness","Apathy"], answer:1, explain:"He learned contentment regardless of plenty or want (4:11–12).", difficulty:"Easy"},
+      {question:"Coworker Paul plans to send:", options:["Timothy","Peter","Apollos","Titus"], answer:0, explain:"He hopes to send Timothy soon (2:19).", difficulty:"Medium"},
+      {question:"Overall tone of Philippians:", options:["Cold and dogmatic","Warm and encouraging","Angry and condemning","Legalistic"], answer:1, explain:"Filled with thanks, joy, and encouragement.", difficulty:"Easy"},
+      {question:"A core application of Philippians:", options:["Worldly success","Humility, joy, and gospel partnership","Power politics","Detailed law-keeping"], answer:1, explain:"Live humbly and joyfully in gospel partnership.", difficulty:"Medium"}
     ]
   },
+
   'col': {
     title: 'Colossians',
     questions: [
-      {question:'Central emphasis of Colossians?', options:['Wealth','Christ\'s supremacy and fullness','Food laws','Angels'], answer:1, explain:'Christ is preeminent; beware hollow philosophy.', difficulty:'medium'},
-      {question:'Founder/minister to the Colossians:', options:['Barnabas','Epaphras','Silas','Luke'], answer:1, explain:'Epaphras labored for the church at Colossae.', difficulty:'easy'},
-      {question:'“Set your minds on things above” is in chapter…', options:['1','2','3','4'], answer:2, explain:'Colossians 3 — put on the new self.', difficulty:'easy'},
-      {question:'Paul warns against…', options:['Prayer','Thanksgiving','Empty philosophy & legalism','Unity'], answer:2, explain:'Human traditions and legalism distort the gospel.', difficulty:'medium'},
-      {question:'Result of Christ\'s fullness in believers:', options:['Pride','Humility, forbearance, love','Isolation','Greed'], answer:1, explain:'Gospel ethics flow from union with Christ.', difficulty:'easy'}
+      {question:"Who wrote Colossians?", options:["Peter","James","Paul","John"], answer:2, explain:"Paul wrote to the church at Colossae.", difficulty:"Easy"},
+      {question:"Colossians chiefly emphasizes:", options:["Wealth and prosperity","Christ’s supremacy and fullness","Mosaic regulations","Angel worship"], answer:1, explain:"Christ’s preeminence over all (1:15–20).", difficulty:"Medium"},
+      {question:"Who labored for the Colossians?", options:["Timothy","Epaphras","Luke","Apollos"], answer:1, explain:"Epaphras is named as their servant/founder (1:7).", difficulty:"Easy"},
+      {question:"Paul warns against:", options:["Prayer","Thanksgiving","Human tradition and hollow philosophy","Praise"], answer:2, explain:"Beware deceptive philosophy and legalism (2:8).", difficulty:"Medium"},
+      {question:"“Set your minds on things above” is in:", options:["1","2","3","4"], answer:2, explain:"Seek the things above (3:1–2).", difficulty:"Easy"},
+      {question:"‘Put off the old self; put on the new’ means:", options:["Political reform","Moral/spiritual renewal of identity","Language polish","Cultural adoption"], answer:1, explain:"New identity in Christ (3:9–10).", difficulty:"Medium"},
+      {question:"Husbands are commanded to:", options:["Domineer","Love their wives","Ignore issues","Punish"], answer:1, explain:"Husbands, love your wives; do not be harsh (3:19).", difficulty:"Easy"},
+      {question:"Instruction about prayer:", options:["Keep only the form","Be steadfast, watchful, thankful","Remain silent","Rely on others"], answer:1, explain:"Continue steadfastly in prayer with thanksgiving (4:2).", difficulty:"Easy"},
+      {question:"Which is NOT a fruit of Christ’s fullness?", options:["Humility and gentleness","Love as the bond of perfection","Greed","Bearing with one another"], answer:2, explain:"Greed is idolatry to put to death (3:5).", difficulty:"Medium"},
+      {question:"Christ’s relation to the church is:", options:["A leader among leaders","The Head","A member","A guest"], answer:1, explain:"He is the Head of the body (1:18).", difficulty:"Easy"},
+      {question:"Proper stance toward angel worship:", options:["Allow","Encourage","Reject","Ignore"], answer:2, explain:"Angel worship is condemned (2:18).", difficulty:"Hard"},
+      {question:"Let the word dwell richly by:", options:["Jealousy","Psalms, hymns, spiritual songs","Grumbling","Chasing trends"], answer:1, explain:"Sing with thankfulness (3:16).", difficulty:"Easy"},
+      {question:"Conduct toward outsiders:", options:["Be indifferent","Argue constantly","Walk in wisdom; make the best use of time","Hide"], answer:2, explain:"Walk wisely; season speech with salt (4:5).", difficulty:"Medium"},
+      {question:"Speech should be:", options:["Harsh","Seasoned with salt; gracious","Slanderous","Empty"], answer:1, explain:"So you may know how to answer each person (4:6).", difficulty:"Medium"},
+      {question:"Which belongs to the ‘old self’ list?", options:["Compassion","Kindness","Patience","Anger/wrath/evil speech"], answer:3, explain:"Put away anger, wrath, malice, slander (3:8).", difficulty:"Easy"},
+      {question:"Right view of Christ:", options:["Chief creature","Image of the invisible God","One angel among many","A mere sage"], answer:1, explain:"Creator and reconciler (1:15–20).", difficulty:"Hard"},
+      {question:"Which name is NOT a coworker in Colossians 4?", options:["Tychicus","Luke","Demas","Ahijah"], answer:3, explain:"Ahijah is unrelated; the others are mentioned (Col 4).", difficulty:"Hard"},
+      {question:"‘Let the peace of Christ rule your hearts’ pairs with:", options:["Quarreling","Thankfulness","Doubt","Pride"], answer:1, explain:"Be thankful; let peace rule (3:15).", difficulty:"Easy"},
+      {question:"Which is NOT a target of Paul’s warnings?", options:["Hollow philosophy","Ritualism","Legalism","Prayer"], answer:3, explain:"Prayer is encouraged.", difficulty:"Easy"},
+      {question:"Core application of Colossians:", options:["Christ-centered living with practiced virtues","Pursuit of wealth","Power expansion","Withdrawal from society"], answer:0, explain:"Live all of life under Christ’s lordship.", difficulty:"Medium"}
     ]
   },
+
   'phm': {
     title: 'Philemon',
     questions: [
-      {question:'Recipient of the letter?', options:['Onesimus','Philemon','Demas','Luke'], answer:1, explain:'Philemon is the addressee; a respected believer.', difficulty:'easy'},
-      {question:'Onesimus was originally…', options:['A priest','A runaway slave','A prophet','A soldier'], answer:1, explain:'Onesimus fled but came to faith and service.', difficulty:'easy'},
-      {question:'Paul asks Philemon to receive Onesimus as…', options:['A servant again','A debtor','A beloved brother','A guest'], answer:2, explain:'Gospel reconciliation reshapes relationships.', difficulty:'medium'},
-      {question:'Paul offers to…', options:['Ignore the debt','Pay what Onesimus owes','Punish Onesimus','Appeal to Caesar'], answer:1, explain:'He volunteers to cover the wrong, modeling grace.', difficulty:'medium'},
-      {question:'Tone of the letter is mainly…', options:['Commanding','Harsh','Personal appeal in love','Legalistic'], answer:2, explain:'It is a warm, persuasive, personal appeal.', difficulty:'easy'}
+      {question:"Who is the recipient of Philemon?", options:["Onesimus","Philemon","Luke","Demas"], answer:1, explain:"Philemon is a respected believer and host of a house-church.", difficulty:"Easy"},
+      {question:"Onesimus was originally:", options:["A priest","A runaway slave","A general","A tax collector"], answer:1, explain:"He fled from Philemon but later became useful in Christ.", difficulty:"Easy"},
+      {question:"Paul’s core appeal regarding Onesimus:", options:["Punish him","Receive him as a beloved brother","Sell him","Expel him"], answer:1, explain:"No longer merely a slave, but a brother (Phm 16).", difficulty:"Easy"},
+      {question:"Paul says about Onesimus’s debt:", options:["Ignore it","Charge it to me; I will repay","Reduce it","Take to court"], answer:1, explain:"Paul offers to cover what he owes (Phm 18–19).", difficulty:"Medium"},
+      {question:"The tone of Philemon is mainly:", options:["Commanding and coercive","Loving personal appeal","Icy and distant","Legalistic"], answer:1, explain:"Paul persuades in love rather than command.", difficulty:"Easy"},
+      {question:"Name meaning of ‘Onesimus’ and its message trajectory:", options:["Useless","Useful","Brave","Loyal"], answer:1, explain:"He moves from ‘useless’ to truly useful by grace.", difficulty:"Medium"},
+      {question:"How does Paul describe himself in Philemon?", options:["A young man","An old man and a prisoner","A king","A priest"], answer:1, explain:"He calls himself ‘an old man’ and ‘a prisoner of Christ Jesus’.", difficulty:"Medium"},
+      {question:"Length/type of Philemon:", options:["A long treatise","A Gospel-length narrative","A prophetic book","A single short personal letter"], answer:3, explain:"Among the shortest NT letters (one chapter).", difficulty:"Easy"},
+      {question:"What power of the gospel does Philemon showcase?", options:["Legal savvy","Relational reconciliation and restoration","Financial growth","Political leverage"], answer:1, explain:"The gospel reshapes broken relationships.", difficulty:"Medium"},
+      {question:"Right application of Philemon:", options:["Retaliation","Forgiveness and welcome","Exclusion","Discrimination"], answer:1, explain:"Receive one another as family in Christ.", difficulty:"Easy"},
+      {question:"Why does Paul appeal rather than command?", options:["To intimidate","To honor voluntary love and obedience","He lacks authority","To avoid paperwork"], answer:1, explain:"He seeks willing, love-shaped obedience.", difficulty:"Medium"},
+      {question:"Why send Onesimus back?", options:["Need for labor","Legal process","For the church’s good and reconciliation","To punish"], answer:2, explain:"Restored fellowship benefits the community.", difficulty:"Medium"},
+      {question:"Paul’s leadership style here is:", options:["Heavy-handed","Mediating love and persuasion","Avoidant","Autocratic"], answer:1, explain:"He models persuasive, relational leadership.", difficulty:"Medium"},
+      {question:"Which topic is LEAST central to Philemon?", options:["Forgiveness","Brotherly love","Reconciliation","Minute law-code details"], answer:3, explain:"Legal minutiae aren’t the focus.", difficulty:"Easy"},
+      {question:"Calling Onesimus ‘my child’ means:", options:["Biological son","Spiritual son born in chains","A servant again","Nepotism"], answer:1, explain:"Paul led him to Christ (Phm 10).", difficulty:"Medium"},
+      {question:"Why is Paul confident Philemon will obey?", options:["Coercion","Civil law","His proven love and faith","Fear"], answer:2, explain:"Paul trusts Philemon’s character (Phm 5, 21).", difficulty:"Medium"},
+      {question:"Which is NOT named among coworkers in Philemon 24?", options:["Mark","Aristarchus","Demas","Joab"], answer:3, explain:"Joab is an OT figure; the others are listed.", difficulty:"Hard"},
+      {question:"Paul’s request to prepare a guest room implies:", options:["Vacation","Extended residency","Hope to visit after release","Migration"], answer:2, explain:"He hopes to be granted to them (Phm 22).", difficulty:"Medium"},
+      {question:"Key modern takeaway of Philemon:", options:["Legal victory","Gospel-shaped reconciling relationships","Power expansion","Retreat from society"], answer:1, explain:"The gospel reframes power and welcomes the other.", difficulty:"Medium"},
+      {question:"Stylistic hallmark of Philemon:", options:["Official decree","Warm, personal, persuasive letter","Poetic psalm","Homily"], answer:1, explain:"It is intimate and persuasive in tone.", difficulty:"Easy"}
     ]
   }
 };
 
 /*****************
- * Storage utils  
+ * Storage utils
  *****************/
 const LS_KEYS = {
-  WRONG_NOTEBOOK: 'bq_wrong_notebook', // per-book map
-  SESSION: 'bq_session' // heavier state (answersRecord, score, etc.)
+  WRONG_NOTEBOOK: 'bq_wrong_notebook_en',
+  SESSION: 'bq_session_en'
 };
-
-// Minimal cookie to satisfy "remember last state": store book + index + diff + mode
 function setStateCookie(state){
-  const data = encodeURIComponent(JSON.stringify({
-    book: state.book, idx: state.idx, diff: state.diff, mode: state.mode
-  }));
-  // 14 days
-  document.cookie = `bq_state=${data}; max-age=${60*60*24*14}; path=/`;
+  const data = encodeURIComponent(JSON.stringify({book: state.book, idx: state.idx, diff: state.diff, mode: state.mode}));
+  document.cookie = `bq_state_en=${data}; max-age=${60*60*24*14}; path=/`;
 }
 function getStateCookie(){
-  const m = document.cookie.match(/(?:^|; )bq_state=([^;]+)/);
+  const m = document.cookie.match(/(?:^|; )bq_state_en=([^;]+)/);
   if(!m) return null; try { return JSON.parse(decodeURIComponent(m[1])); } catch { return null; }
 }
-
-function saveSession(obj){
-  localStorage.setItem(LS_KEYS.SESSION, JSON.stringify(obj));
-}
-function loadSession(){
-  const s = localStorage.getItem(LS_KEYS.SESSION); return s? JSON.parse(s): null;
-}
-
+function saveSession(obj){ localStorage.setItem(LS_KEYS.SESSION, JSON.stringify(obj)); }
+function loadSession(){ const s = localStorage.getItem(LS_KEYS.SESSION); return s? JSON.parse(s): null; }
 function saveWrong(bookKey, record){
   const raw = localStorage.getItem(LS_KEYS.WRONG_NOTEBOOK);
   const map = raw? JSON.parse(raw): {};
@@ -305,9 +388,7 @@ function saveWrong(bookKey, record){
   map[bookKey].push(record);
   localStorage.setItem(LS_KEYS.WRONG_NOTEBOOK, JSON.stringify(map));
 }
-function getWrongMap(){
-  const raw = localStorage.getItem(LS_KEYS.WRONG_NOTEBOOK); return raw? JSON.parse(raw): {};
-}
+function getWrongMap(){ const raw = localStorage.getItem(LS_KEYS.WRONG_NOTEBOOK); return raw? JSON.parse(raw): {}; }
 function clearWrong(bookKey){
   const raw = localStorage.getItem(LS_KEYS.WRONG_NOTEBOOK);
   if(!raw) return; const map = JSON.parse(raw); delete map[bookKey];
@@ -315,7 +396,7 @@ function clearWrong(bookKey){
 }
 
 /*****************
- * UI elements   *
+ * UI elements
  *****************/
 const bookSelect = document.getElementById('bookSelect');
 const diffSelect = document.getElementById('diffSelect');
@@ -351,20 +432,16 @@ const retryWrongBtn = document.getElementById('retryWrongBtn');
 const clearWrongBtn = document.getElementById('clearWrongBtn');
 
 /*****************
- * Runtime state *
+ * Runtime state
  *****************/
 let state = {
-  bookKey: null,
-  questions: [],
-  idx: 0,
-  score: 0,
-  mode: 'normal', // or 'wrongonly'
-  diff: 'all',
-  answersRecord: [] // {q, options, answer, user, correct, explain, difficulty}
+  bookKey:null, questions:[], idx:0, score:0,
+  mode:'normal', diff:'all',
+  answersRecord:[]
 };
 
 /*****************
- * Intro handling *
+ * Intro rendering
  *****************/
 bookSelect.addEventListener('change', renderIntro);
 function renderIntro(){
@@ -383,66 +460,53 @@ function renderIntro(){
 }
 
 /*****************
- * Start & Resume *
+ * Start/Resume
  *****************/
-startBtn.addEventListener('click', () => {
+startBtn.addEventListener('click', ()=>{
   const key = bookSelect.value; if(!key) return alert('Choose a book first.');
   const diff = diffSelect.value; const mode = modeSelect.value;
-  startQuiz({key, diff, mode});
+  startQuiz({key,diff,mode});
 });
-
-resumeBtn.addEventListener('click', () => {
-  const ck = getStateCookie();
-  const ss = loadSession();
-  if(!ck || !ss){ return alert('No saved session found in cookies.'); }
-  state = ss; // trust localStorage for heavy state
-  // Ensure dataset exists
-  if(!booksData[state.bookKey]) return alert('Book data not found.');
-  // Re-render current question
+resumeBtn.addEventListener('click', ()=>{
+  const ck = getStateCookie(); const ss = loadSession();
+  if(!ck || !ss) return alert('No saved session.');
+  state = ss;
+  if(!booksData[state.bookKey]) return alert('Book data missing.');
   bookTitleEl.textContent = booksData[state.bookKey].title;
   diffPill.textContent = labelForDiff(state.diff);
   document.getElementById('selector').scrollIntoView({behavior:'smooth'});
-  quizArea.classList.remove('hidden');
-  resultArea.classList.add('hidden');
-  reviewArea.classList.add('hidden');
+  quizArea.classList.remove('hidden'); resultArea.classList.add('hidden'); reviewArea.classList.add('hidden');
   renderQuestion();
 });
-
-function startQuiz({key, diff, mode}){
-  state.bookKey = key; state.diff = diff; state.mode = mode; state.idx = 0; state.score = 0; state.answersRecord = [];
+function startQuiz({key,diff,mode}){
+  state.bookKey=key; state.diff=diff; state.mode=mode; state.idx=0; state.score=0; state.answersRecord=[];
   const allQ = booksData[key].questions.slice();
-  // Wrong-only mode: pull from notebook
-  if(mode === 'wrongonly'){
-    const wrongMap = getWrongMap();
-    const arr = (wrongMap[key] || []).map(r => ({...r.original}));
-    if(arr.length === 0){ alert('No wrong answers saved for this book.'); return; }
+  if(mode==='wrongonly'){
+    const wrongMap = getWrongMap(); const arr=(wrongMap[key]||[]).map(r=>({...r.original}));
+    if(arr.length===0){ alert('Wrong-answer notebook is empty for this book.'); return; }
     state.questions = arr;
-  } else {
-    // Filter by difficulty
-    const filtered = (diff==='all')? allQ : allQ.filter(q=> (q.difficulty||'easy')===diff);
+  }else{
+    const filtered = (diff==='all')? allQ : allQ.filter(q=> (q.difficulty||'Easy').toLowerCase()===diff.toLowerCase());
     state.questions = shuffle(filtered);
   }
-  if(state.questions.length === 0){ alert('No questions available for this selection.'); return; }
+  if(state.questions.length===0){ alert('No questions match your selection.'); return; }
   bookTitleEl.textContent = booksData[key].title;
   diffPill.textContent = labelForDiff(diff);
-  quizArea.classList.remove('hidden');
-  resultArea.classList.add('hidden');
-  reviewArea.classList.add('hidden');
+  quizArea.classList.remove('hidden'); resultArea.classList.add('hidden'); reviewArea.classList.add('hidden');
   renderQuestion();
 }
 
 /*****************
- * Render Q/A     *
+ * Render / Grade
  *****************/
 function renderQuestion(){
   const q = state.questions[state.idx];
-  explainBox.classList.add('hidden'); explainBox.innerHTML='';
-  nextBtn.disabled = true;
+  explainBox.classList.add('hidden'); explainBox.innerHTML=''; nextBtn.disabled=true;
   progressEl.textContent = `${state.idx+1} / ${state.questions.length}`;
   qCard.innerHTML = `
     <div class="flex items-center justify-between mb-2">
       <div class="text-base font-semibold">${state.idx+1}. ${escapeHtml(q.question)}</div>
-      <span class="chip ${diffClass(q.difficulty)}">${escapeHtml(cap(q.difficulty||'easy'))}</span>
+      <span class="chip ${diffClass(q.difficulty)}">${escapeHtml(q.difficulty||'Easy')}</span>
     </div>
     <div class="space-y-2">
       ${q.options.map((opt,i)=>`
@@ -451,130 +515,84 @@ function renderQuestion(){
         </button>
       `).join('')}
     </div>`;
-  Array.from(qCard.querySelectorAll('.opt')).forEach(btn=> btn.addEventListener('click', onSelect));
-  // persist minimal cookie + heavy session
-  setStateCookie({book: state.bookKey, idx: state.idx, diff: state.diff, mode: state.mode});
+  Array.from(qCard.querySelectorAll('.opt')).forEach(btn=>btn.addEventListener('click', onSelect));
+  setStateCookie({book:state.bookKey, idx:state.idx, diff:state.diff, mode:state.mode});
   saveSession(state);
 }
-
 function onSelect(e){
-  const btn = e.currentTarget; const sel = parseInt(btn.getAttribute('data-i'));
-  const q = state.questions[state.idx]; const correct = (sel === q.answer);
+  const btn=e.currentTarget; const sel=parseInt(btn.getAttribute('data-i'));
+  const q=state.questions[state.idx]; const correct=(sel===q.answer);
   if(correct) state.score++;
-  state.answersRecord.push({
-    q: q.question, options: q.options.slice(), answer: q.answer, user: sel,
-    correct, explain: q.explain, difficulty: q.difficulty||'easy'
-  });
-  // Visual feedback
+  state.answersRecord.push({q:q.question, options:q.options.slice(), answer:q.answer, user:sel, correct, explain:q.explain, difficulty:q.difficulty||'Easy'});
   Array.from(qCard.querySelectorAll('.opt')).forEach(b=>{
-    b.disabled = true; b.classList.add('opacity-80');
-    const i = parseInt(b.getAttribute('data-i'));
-    if(i === q.answer){ b.classList.add('border-2','border-green-300','bg-green-50'); }
-    if(i === sel && i !== q.answer){ b.classList.add('border-2','border-red-300','bg-red-50'); }
+    b.disabled=true; b.classList.add('opacity-80');
+    const i=parseInt(b.getAttribute('data-i'));
+    if(i===q.answer){ b.classList.add('border-2','border-green-300','bg-green-50'); }
+    if(i===sel && i!==q.answer){ b.classList.add('border-2','border-red-300','bg-red-50'); }
   });
-  explainBox.innerHTML = `<div class="font-medium mb-1">${correct? 'Correct 🎉' : 'Not quite ✖️'}</div><div class="text-sm">${escapeHtml(q.explain||'')}</div>`;
+  explainBox.innerHTML = `<div class="font-medium mb-1">${correct?'Correct 🎉':'Not quite ✖️'}</div><div class="text-sm">${escapeHtml(q.explain||'')}</div>`;
   explainBox.classList.remove('hidden');
-  nextBtn.disabled = false;
-  // Save wrong answers to notebook with book key
-  if(!correct){
-    saveWrong(state.bookKey, { original: q, picked: sel, at: Date.now() });
-  }
-  // persist
+  nextBtn.disabled=false;
+  if(!correct){ saveWrong(state.bookKey, {original:q, picked:sel, at:Date.now()}); }
   saveSession(state);
 }
-
-nextBtn.addEventListener('click', () => {
-  if(state.idx < state.questions.length - 1){
-    state.idx++;
-    renderQuestion();
-    window.scrollTo({top:0,behavior:'smooth'});
-  } else {
-    showResult();
-  }
+nextBtn.addEventListener('click', ()=>{
+  if(state.idx<state.questions.length-1){ state.idx++; renderQuestion(); window.scrollTo({top:0,behavior:'smooth'}); }
+  else{ showResult(); }
 });
-
-quitBtn.addEventListener('click', () => {
-  if(confirm('Quit the quiz and return to the start?')) location.reload();
-});
+quitBtn.addEventListener('click', ()=>{ if(confirm('Quit and return to start?')) location.reload(); });
 
 /*****************
- * Results & Review
+ * Results / Review
  *****************/
 function showResult(){
-  quizArea.classList.add('hidden');
-  resultArea.classList.remove('hidden');
-  const total = state.questions.length; const pct = Math.round(state.score/total*100);
+  quizArea.classList.add('hidden'); resultArea.classList.remove('hidden');
+  const total=state.questions.length; const pct=Math.round(state.score/total*100);
   finalScore.textContent = `Score: ${state.score} / ${total} (${pct}%)`;
-  finalMsg.textContent = pct===100? 'Perfect!': pct>=80? 'Great job!': pct>=50? 'Good effort — review and try again.': 'Keep practicing — check the explanations and retry wrong answers.';
+  finalMsg.textContent = pct===100?'Perfect!': pct>=80?'Great job!': pct>=50?'Good effort — review and try again.':'Keep practicing — check explanations and retry wrong answers.';
   saveSession(state);
 }
-
-reviewBtn.addEventListener('click', ()=>{
-  resultArea.classList.add('hidden');
-  reviewArea.classList.remove('hidden');
-  renderReview();
-});
-
+reviewBtn.addEventListener('click', ()=>{ resultArea.classList.add('hidden'); reviewArea.classList.remove('hidden'); renderReview(); });
 restartBtn.addEventListener('click', ()=> location.reload());
 closeReviewBtn.addEventListener('click', ()=>{ reviewArea.classList.add('hidden'); resultArea.classList.remove('hidden'); });
-
 function renderReview(){
-  reviewList.innerHTML = '';
-  state.answersRecord.forEach((r, idx)=>{
-    const div = document.createElement('div');
-    div.className = 'p-3 border border-gray-100 rounded-lg';
-    const userOpt = r.user != null ? String.fromCharCode(65 + r.user) : '(no answer)';
-    const correctOpt = String.fromCharCode(65 + r.answer);
+  reviewList.innerHTML='';
+  state.answersRecord.forEach((r,idx)=>{
+    const userOpt = r.user!=null ? String.fromCharCode(65+r.user) : '(no answer)';
+    const correctOpt = String.fromCharCode(65+r.answer);
+    const div=document.createElement('div'); div.className='p-3 border border-gray-100 rounded-lg';
     div.innerHTML = `
       <div class="flex items-center justify-between">
         <div class="font-medium mb-1">${idx+1}. ${escapeHtml(r.q)}</div>
-        <span class="chip ${diffClass(r.difficulty)}">${escapeHtml(cap(r.difficulty))}</span>
+        <span class="chip ${diffClass(r.difficulty)}">${escapeHtml(r.difficulty)}</span>
       </div>
       <div class="text-sm text-gray-700 mb-2">
-        Yours: <span class="${r.correct? 'text-green-600 font-semibold' : 'text-red-600 font-semibold'}">${escapeHtml(userOpt)}</span>
+        Yours: <span class="${r.correct?'text-green-600 font-semibold':'text-red-600 font-semibold'}">${escapeHtml(userOpt)}</span>
         &nbsp; Correct: <span class="font-semibold">${escapeHtml(correctOpt)}</span>
       </div>
       <div class="text-sm text-gray-700">${escapeHtml(r.explain||'')}</div>`;
     reviewList.appendChild(div);
   });
 }
-
 retryWrongBtn.addEventListener('click', ()=>{
-  const k = state.bookKey; const map = getWrongMap();
-  const wrongArr = (map[k]||[]).map(r=> ({...r.original}));
-  if(wrongArr.length===0){ alert('No wrong answers saved for this book.'); return; }
-  state.mode = 'wrongonly'; state.idx = 0; state.score = 0; state.answersRecord = []; state.questions = shuffle(wrongArr);
-  reviewArea.classList.add('hidden');
-  quizArea.classList.remove('hidden');
-  renderQuestion();
+  const k=state.bookKey; const map=getWrongMap(); const wrongArr=(map[k]||[]).map(r=>({...r.original}));
+  if(wrongArr.length===0){ alert('Wrong-answer notebook is empty.'); return; }
+  state.mode='wrongonly'; state.idx=0; state.score=0; state.answersRecord=[]; state.questions=shuffle(wrongArr);
+  reviewArea.classList.add('hidden'); quizArea.classList.remove('hidden'); renderQuestion();
 });
-
-clearWrongBtn.addEventListener('click', ()=>{
-  if(confirm('Clear the wrong-answer notebook for this book?')){ clearWrong(state.bookKey); alert('Wrong-answer notebook cleared.'); }
-});
-
+clearWrongBtn.addEventListener('click', ()=>{ if(confirm('Clear the wrong-answer notebook for this book?')){ clearWrong(state.bookKey); alert('Wrong-answer notebook cleared.'); } });
 exportWrongBtn.addEventListener('click', ()=>{
-  const k = state.bookKey; const map = getWrongMap();
-  const rows = (map[k]||[]).map(x=>({question:x.original.question, options:x.original.options, answer:x.original.answer, picked:x.picked}));
-  const blob = new Blob([JSON.stringify(rows,null,2)], {type:'application/json'});
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${k}-wrong-notebook.json`; a.click();
-  URL.revokeObjectURL(a.href);
+  const k=state.bookKey; const map=getWrongMap();
+  const rows=(map[k]||[]).map(x=>({question:x.original.question, options:x.original.options, answer:x.original.answer, picked:x.picked}));
+  const blob=new Blob([JSON.stringify(rows,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`${k}-wrong-notebook.json`; a.click(); URL.revokeObjectURL(a.href);
 });
 
 /*****************
- * Helpers        *
+ * Helpers
  *****************/
-function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]];} return arr; }
-function labelForDiff(d){ return d==='all'? 'All' : cap(d); }
-function cap(s){ return (s||'').charAt(0).toUpperCase()+ (s||'').slice(1); }
-function diffClass(d){
-  switch(d){
-    case 'easy': return 'bg-green-50 border-green-200 text-green-700';
-    case 'medium': return 'bg-amber-50 border-amber-200 text-amber-700';
-    case 'hard': return 'bg-red-50 border-red-200 text-red-700';
-    default: return 'bg-slate-50 border-slate-200 text-slate-700';
-  }
-}
+function shuffle(a){ const arr=a.slice(); for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+function labelForDiff(d){ return d==='all'?'All': d==='easy'?'Easy': d==='medium'?'Medium': d==='hard'?'Hard':'All'; }
+function diffClass(d){ switch((d||'').toLowerCase()){ case 'easy': return 'bg-green-50 border-green-200 text-green-700'; case 'medium': return 'bg-amber-50 border-amber-200 text-amber-700'; case 'hard': return 'bg-red-50 border-red-200 text-red-700'; default: return 'bg-slate-50 border-slate-200 text-slate-700'; } }
 function escapeHtml(s){ if(s==null) return ''; return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 </script>
 </body>
